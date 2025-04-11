@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
-import { Code, Layers, Shield, Server, ExternalLink, Github } from "lucide-react"
+import { Code, Layers, Shield, Server, ExternalLink, Github, ChevronUp, ChevronDown, ArrowLeft, ArrowRight } from "lucide-react"
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
 
 const categories = [
   {
@@ -72,6 +73,26 @@ const projects = [
   },
   {
     id: 4,
+    title: "E-learning Platform",
+    description:
+      "Comprehensive online learning platform with interactive courses, quizzes, and progress tracking.",
+    category: "fullstack",
+    tags: ["React.js", "MongoDB", "Express", "Socket.io", "AWS"],
+    year: "2024",
+    link: "https://github.com/elearning-platform",
+  },
+  {
+    id: 5,
+    title: "Smart Home Dashboard",
+    description:
+      "Dashboard for monitoring and controlling IoT devices in a smart home environment.",
+    category: "fullstack",
+    tags: ["Vue.js", "Node.js", "MQTT", "IoT", "WebSockets"],
+    year: "2024",
+    link: "https://github.com/smarthome-dashboard",
+  },
+  {
+    id: 6,
     title: "3D Game Assets",
     description: "Collection of 3D models and animations created for various game development projects.",
     category: "3d",
@@ -80,7 +101,7 @@ const projects = [
     link: "#",
   },
   {
-    id: 5,
+    id: 7,
     title: "AR Product Viewer",
     description: "Augmented reality application for visualizing products in real-world environments.",
     category: "3d",
@@ -89,7 +110,25 @@ const projects = [
     link: "#",
   },
   {
-    id: 6,
+    id: 8,
+    title: "Character Modeling",
+    description: "3D character models designed for animation and game development.",
+    category: "3d",
+    tags: ["Maya", "ZBrush", "Substance Painter", "Rigging"],
+    year: "2024",
+    link: "#",
+  },
+  {
+    id: 9,
+    title: "Virtual Exhibition Space",
+    description: "Interactive 3D gallery for displaying digital art in a virtual environment.",
+    category: "3d",
+    tags: ["Unity", "WebGL", "3D Modeling", "Interactive Design"],
+    year: "2025",
+    link: "#",
+  },
+  {
+    id: 10,
     title: "Security Audit Tool",
     description: "Automated security assessment tool for web applications and network infrastructure.",
     category: "cyber",
@@ -98,7 +137,7 @@ const projects = [
     link: "#",
   },
   {
-    id: 7,
+    id: 11,
     title: "Secure Authentication System",
     description: "Implementation of OAuth/JWT authentication with enhanced security features.",
     category: "cyber",
@@ -107,7 +146,7 @@ const projects = [
     link: "#",
   },
   {
-    id: 8,
+    id: 12,
     title: "CI/CD Pipeline",
     description: "Automated deployment pipeline for continuous integration and delivery.",
     category: "devops",
@@ -120,10 +159,15 @@ const projects = [
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState(null)
   const [clickedCategory, setClickedCategory] = useState(null)
-  const ref = useRef(null)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [scrollDirection, setScrollDirection] = useState(0) // -1 for up, 1 for down
+  
+  const sectionRef = useRef(null)
+  
+  const PROJECTS_PER_PAGE = 2
 
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: sectionRef,
     offset: ["start end", "end start"],
   })
 
@@ -133,9 +177,56 @@ export default function Projects() {
 
   const currentCategory = clickedCategory || activeCategory
   const filteredProjects = currentCategory ? projects.filter((project) => project.category === currentCategory) : []
+  const totalPages = Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE)
+  
+  // Get current visible projects
+  const currentProjects = filteredProjects.slice(
+    currentPage * PROJECTS_PER_PAGE,
+    (currentPage + 1) * PROJECTS_PER_PAGE
+  )
+
+  // Calculate displayed projects so far
+  const projectsViewedSoFar = Math.min((currentPage + 1) * PROJECTS_PER_PAGE, filteredProjects.length)
+  const projectCountDisplay = `${projectsViewedSoFar} of ${filteredProjects.length}`
+
+  // Reset pagination when category changes
+  useEffect(() => {
+    setCurrentPage(0)
+  }, [currentCategory])
+
+  // Animation variants for project cards
+  const cardVariants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 300 : -300, // Slide in from right or left
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction) => ({
+      x: direction > 0 ? -300 : 300, // Exit to left or right
+      opacity: 0
+    })
+  }
+
+  // Navigation handlers
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setScrollDirection(-1)
+      setCurrentPage(prev => prev - 1)
+    }
+  }
+  
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setScrollDirection(1)
+      setCurrentPage(prev => prev + 1)
+    }
+  }
 
   return (
-    <section id="projects" ref={ref} className="py-20 px-4 md:px-8 lg:px-16 relative overflow-hidden">
+    <section id="projects" ref={sectionRef} className="py-20 px-4 md:px-8 lg:px-16 relative overflow-hidden">
       {/* Parallax background */}
       <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 w-full h-full">
@@ -150,7 +241,7 @@ export default function Projects() {
           <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-500 dark:from-primary dark:to-purple-400 bg-clip-text text-transparent">
             My Projects
           </h2>
-          <p className="text-mute-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Explore my work across different fields. Hover or click a category to see related projects.
           </p>
         </motion.div>
@@ -210,48 +301,125 @@ export default function Projects() {
               transition={{ duration: 0.3 }}
               className="overflow-hidden"
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                {filteredProjects.map((project) => (
-                  <motion.div
-                    key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Card className="h-full backdrop-blur-sm bg-background/80 border-primary/10 hover:border-primary/30 transition-all">
-                      <CardHeader>
-                        <div className="flex justify-between items-start">
-                          <CardTitle>{project.title}</CardTitle>
-                          <Badge variant="outline">{project.year}</Badge>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <CardDescription className="mb-4">{project.description}</CardDescription>
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags.map((tag, index) => (
-                            <Badge key={index} variant="secondary">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                      <CardFooter>
-                        <Button variant="outline" size="sm" asChild className="group">
-                          <a
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2"
-                          >
-                            <Github className="h-4 w-4 group-hover:text-primary transition-colors" />
-                            <span>View Project</span>
-                            <ExternalLink className="ml-1 h-3 w-3 opacity-70" />
-                          </a>
+              {/* Separator between categories and projects */}
+              <Separator className="my-8" />
+              
+              {/* Navigation and project counter */}
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-semibold">
+                  {categories.find(c => c.id === currentCategory)?.name} Projects
+                </h3>
+                
+                {filteredProjects.length > 0 && (
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm text-muted-foreground">
+                      {projectCountDisplay}
+                    </span>
+                    
+                    {/* Navigation controls */}
+                    {filteredProjects.length > PROJECTS_PER_PAGE && (
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="icon" 
+                          onClick={handlePrevPage}
+                          disabled={currentPage === 0}
+                          className="h-8 w-8"
+                        >
+                          <ArrowLeft className="h-4 w-4" />
                         </Button>
-                      </CardFooter>
-                    </Card>
+                        
+                        <Button 
+                          variant="outline" 
+                          size="icon" 
+                          onClick={handleNextPage}
+                          disabled={currentPage >= totalPages - 1}
+                          className="h-8 w-8"
+                        >
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+              
+              {/* Projects container */}
+              <div className="relative min-h-[300px]">                
+                {/* Projects display */}
+                <AnimatePresence mode="wait" custom={scrollDirection} initial={false}>
+                  <motion.div 
+                    key={currentPage}
+                    custom={scrollDirection}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    variants={cardVariants}
+                    transition={{
+                      duration: 0.5,
+                      ease: "easeInOut",
+                    }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full"
+                  >
+                    {currentProjects.map((project) => (
+                      <div key={project.id}>
+                        <Card className="h-full backdrop-blur-sm bg-background/80 border-primary/10 hover:border-primary/30 transition-all">
+                          <CardHeader>
+                            <div className="flex justify-between items-start">
+                              <CardTitle>{project.title}</CardTitle>
+                              <Badge variant="outline">{project.year}</Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent>
+                            <CardDescription className="mb-4">{project.description}</CardDescription>
+                            <div className="flex flex-wrap gap-2">
+                              {project.tags.map((tag, idx) => (
+                                <Badge key={idx} variant="secondary">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          </CardContent>
+                          <CardFooter>
+                            <Button variant="outline" size="sm" asChild className="group">
+                              <a
+                                href={project.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2"
+                              >
+                                <Github className="h-4 w-4 group-hover:text-primary transition-colors" />
+                                <span>View Project</span>
+                                <ExternalLink className="ml-1 h-3 w-3 opacity-70" />
+                              </a>
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      </div>
+                    ))}
                   </motion.div>
-                ))}
+                </AnimatePresence>
+              </div>
+              
+              {/* Mobile scroll indicators */}
+              <div className="flex justify-center mt-6 md:hidden">
+                {currentPage > 0 && (
+                  <div className="flex flex-col items-center animate-bounce mr-8">
+                    <Button variant="ghost" size="sm" onClick={handlePrevPage}>
+                      <ChevronUp className="h-5 w-5" />
+                      <span className="ml-1">Previous</span>
+                    </Button>
+                  </div>
+                )}
+                
+                {currentPage < totalPages - 1 && (
+                  <div className="flex flex-col items-center animate-bounce">
+                    <Button variant="ghost" size="sm" onClick={handleNextPage}>
+                      <span className="mr-1">Next</span>
+                      <ChevronDown className="h-5 w-5" />
+                    </Button>
+                  </div>
+                )}
               </div>
             </motion.div>
           )}
