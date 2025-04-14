@@ -49,7 +49,7 @@ const projects = [
     category: "fullstack",
     tags: ["React.js", "Django", "Machine Learning"],
     year: "2024",
-    link: "https://github.com/gutfood",
+    link: "https://github.com/RonitNaik122/NFC3_Innov8ers",
   },
   {
     id: 2,
@@ -59,7 +59,7 @@ const projects = [
     category: "fullstack",
     tags: ["TypeScript", "Next.js", "WebXR", "Django", "Flask", "SqlLite", "Stripe"],
     year: "2025",
-    link: "https://github.com/commerce-genesis",
+    link: "https://github.com/RonitNaik122/commerce-genesis",
   },
   {
     id: 3,
@@ -68,8 +68,8 @@ const projects = [
       "A platform to connect alumni with students, enabling discussions, event updates, and secure donations with real-time chat.",
     category: "fullstack",
     tags: ["React.js", "Django", "Express", "Three.js", "Android Studio"],
-    year: "2023",
-    link: "https://github.com/AlumniConnect",
+    year: "2024",
+    link: "https://github.com/RonitNaik122/Vermithor_02",
   },
   {
     id: 4,

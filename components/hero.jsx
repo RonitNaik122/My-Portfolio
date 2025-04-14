@@ -1,74 +1,29 @@
-"use client";
+"use client"
 
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
+import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import { useTheme } from "next-themes"
 
 const Hero = () => {
-  const { theme } = useTheme();
-  const [scrollY, setScrollY] = useState(0);
-  const [mounted, setMounted] = useState(false);
+  const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    setMounted(true)
+  }, [])
 
   if (!mounted) {
     return (
       <section className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden transition-colors duration-500 ease-in-out">
         {/* Loading placeholder */}
       </section>
-    );
+    )
   }
 
-  const isDark = theme === "dark";
+  const isDark = theme === "dark"
 
   return (
     <section className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden transition-colors duration-500 ease-in-out">
-      {/* Background Gradient */}
-      <div
-        className={`absolute inset-0 bg-gradient-to-b transition-colors duration-500 ease-in-out ${
-          isDark ? "from-[#0a0f30] to-[#000000]" : "from-slate-100 to-white"
-        }`}
-      />
-
-      {/* Parallax Orbs (Scroll-based) */}
-      <motion.div
-        className="absolute -top-32 left-10 w-96 h-96 rounded-full opacity-30 blur-3xl transition-colors duration-500 ease-in-out"
-        style={{
-          backgroundColor: isDark ? "#1a1a6f" : "#e0e7ff",
-          transform: `translateY(${scrollY * 0.3}px)`,
-        }}
-        transition={{ type: "spring", damping: 15 }}
-      />
-
-      <motion.div
-        className="absolute top-40 right-10 w-96 h-96 rounded-full opacity-20 blur-2xl transition-colors duration-500 ease-in-out"
-        style={{
-          backgroundColor: isDark ? "#3c3ca1" : "#c7d2fe",
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
-        transition={{ type: "spring", damping: 15 }}
-      />
-
-      <motion.div
-        className="absolute bottom-0 w-full h-72 rounded-t-[100px] opacity-30 blur-[120px] transition-colors duration-500 ease-in-out"
-        style={{
-          backgroundColor: isDark ? "#191970" : "#dbeafe",
-          transform: `translateY(${scrollY * -0.2}px)`,
-        }}
-        transition={{ type: "spring", damping: 15 }}
-      />
-
       {/* Main Content */}
       <motion.div
         className="z-10 text-center transition-colors duration-500 ease-in-out"
@@ -94,9 +49,7 @@ const Hero = () => {
           initial={{ letterSpacing: "0.2em" }}
           animate={{
             letterSpacing: "0.1em",
-            textShadow: isDark
-              ? "0 0 15px rgba(176, 170, 255, 0.3)"
-              : "0 0 15px rgba(59, 130, 246, 0.2)",
+            textShadow: isDark ? "0 0 15px rgba(176, 170, 255, 0.3)" : "0 0 15px rgba(59, 130, 246, 0.2)",
           }}
           transition={{
             letterSpacing: { delay: 0.3, duration: 1.5 },
@@ -142,7 +95,7 @@ const Hero = () => {
         </motion.div>
       </motion.div>
     </section>
-  );
-};
+  )
+}
 
-export default Hero;
+export default Hero

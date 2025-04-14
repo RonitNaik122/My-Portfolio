@@ -67,7 +67,7 @@ export default function Activities() {
       <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="absolute top-[15%] right-[20%] w-[25%] h-[25%] rounded-full bg-yellow-500/5 blur-3xl" />
-          <div className="absolute bottom-[15%] left-[15%] w-[20%] h-[20%] rounded-full bg-primary/5 blur-3xl" />
+          <div className="absolute bottom-[15%] left-[15%] w-[20%] h-[20%] rounded-full bg-blue-500/5 blur-3xl" />
           <div className="absolute top-[40%] left-[40%] w-[15%] h-[15%] rounded-full bg-green-500/5 blur-2xl" />
         </div>
       </motion.div>
@@ -83,31 +83,53 @@ export default function Activities() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {activities.map((activity, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-            >
-              <Card className="h-full backdrop-blur-sm bg-background/80 border-primary/10 hover:border-primary/30 transition-all">
-                <CardHeader className="pb-2">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="bg-primary/10 w-10 h-10 rounded-full flex items-center justify-center">
-                      <activity.icon className="w-5 h-5 text-primary" />
+          {activities.map((activity, index) => {
+            // Create separate variants for initial animation and hover
+            const cardVariants = {
+              initial: { opacity: 0, y: 20 },
+              visible: { 
+                opacity: 1, 
+                y: 0, 
+                transition: { 
+                  duration: 0.5, 
+                  delay: index * 0.1 
+                } 
+              },
+              hover: { 
+                y: -5,
+                transition: { 
+                  duration: 0.2, 
+                  delay: 0 
+                }
+              }
+            };
+
+            return (
+              <motion.div
+                key={index}
+                variants={cardVariants}
+                initial="initial"
+                whileInView="visible"
+                whileHover="hover"
+                viewport={{ once: true }}
+              >
+                <Card className="h-full backdrop-blur-sm bg-background/80 border-primary/10 hover:border-primary/30 transition-all">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="bg-primary/10 w-10 h-10 rounded-full flex items-center justify-center">
+                        <activity.icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <CardTitle className="text-lg">{activity.title}</CardTitle>
                     </div>
-                    <CardTitle className="text-lg">{activity.title}</CardTitle>
-                  </div>
-                  <CardDescription className="text-sm font-medium">{activity.period}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">{activity.description}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                    <CardDescription className="text-sm font-medium">{activity.period}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">{activity.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

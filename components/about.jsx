@@ -46,15 +46,6 @@ export default function About() {
 
   return (
     <section id="about" ref={ref} className="py-20 px-4 md:px-8 lg:px-16 relative overflow-hidden">
-      {/* Parallax background elements */}
-      <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-[10%] left-[5%] w-[20%] h-[20%] rounded-full bg-primary/5 blur-3xl" />
-          <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-blue-500/5 blur-3xl" />
-          <div className="absolute top-[40%] right-[20%] w-[15%] h-[15%] rounded-full bg-primary/5 blur-2xl" />
-        </div>
-      </motion.div>
-
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div style={{ opacity, scale }} className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-500 dark:from-primary dark:to-purple-400 bg-clip-text text-transparent">

@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react"
 
 import { ThemeProvider } from "@/components/theme-provider"
 import { ModeToggle } from "@/components/mode-toggle"
+import AnimatedBackground from "@/components/animated-background"
 import Hero from "@/components/hero"
 import About from "@/components/about"
 import Projects from "@/components/projects"
@@ -26,6 +27,9 @@ export default function Home() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <div className="relative min-h-screen" ref={containerRef}>
+        {/* Add the animated background component */}
+        <AnimatedBackground />
+
         <div className="fixed top-4 right-4 z-50">
           <ModeToggle />
         </div>
@@ -42,7 +46,7 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        <div className="relative z-10 bg-background">
+        <div className="relative z-10">
           <About />
           <Skills />
           <Projects />

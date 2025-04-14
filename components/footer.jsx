@@ -21,6 +21,30 @@ export default function Footer() {
 
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
 
+  // Button hover animation variants
+  const buttonVariants = {
+    initial: { scale: 1 },
+    hover: { 
+      scale: 1.05,
+      transition: { 
+        duration: 0.2,
+        ease: "easeInOut"
+      }
+    }
+  }
+
+  // Icon animation variants 
+  const iconVariants = {
+    initial: { rotate: 0 },
+    hover: { 
+      rotate: 5,
+      transition: { 
+        duration: 0.2,
+        ease: "easeInOut"
+      }
+    }
+  }
+
   return (
     <footer ref={ref} className="py-20 px-4 md:px-8 lg:px-16 relative overflow-hidden">
       {/* Parallax background elements */}
@@ -54,33 +78,60 @@ export default function Footer() {
           </p>
         </motion.div>
 
+        {/* Responsive social links */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex justify-center gap-4 mb-12"
+          className="flex flex-wrap justify-center gap-3 mb-12"
         >
           {socialLinks.map((link, index) => (
-            <Button
+            <motion.div
               key={index}
-              variant="outline"
-              size="lg"
-              asChild
-              className="group border-primary/20 hover:border-primary/50 backdrop-blur-sm bg-background/80"
+              variants={buttonVariants}
+              initial="initial"
+              whileHover="hover"
             >
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.name}
-                className="flex items-center gap-2"
+              <Button
+                variant="outline"
+                size="icon"
+                asChild
+                className="group border-primary/20 hover:border-primary/50 backdrop-blur-sm bg-background/80 dark:bg-background/50 dark:hover:bg-background/70 transition-all duration-300 shadow-sm hover:shadow-md flex sm:hidden"
               >
-                <link.icon className="h-5 w-5 group-hover:text-primary transition-colors" />
-                <span>{link.name}</span>
-                <ExternalLink className="h-3 w-3 opacity-70" />
-              </a>
-            </Button>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.name}
+                >
+                  <motion.div variants={iconVariants}>
+                    <link.icon className="h-5 w-5 group-hover:text-primary transition-colors" />
+                  </motion.div>
+                </a>
+              </Button>
+
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="group border-primary/20 hover:border-primary/50 backdrop-blur-sm bg-background/80 dark:bg-background/50 dark:hover:bg-background/70 transition-all duration-300 shadow-sm hover:shadow-md hidden sm:flex"
+              >
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.name}
+                  className="flex items-center gap-2"
+                >
+                  <motion.div variants={iconVariants}>
+                    <link.icon className="h-5 w-5 group-hover:text-primary transition-colors" />
+                  </motion.div>
+                  <span className="font-medium">{link.name}</span>
+                  <ExternalLink className="h-3 w-3 opacity-70 group-hover:opacity-100 transition-opacity" />
+                </a>
+              </Button>
+            </motion.div>
           ))}
         </motion.div>
 
