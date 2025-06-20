@@ -1,9 +1,9 @@
 import "./globals.css"
 
 export const metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.dev",
+  title: "Ronit Naik",
+  description: "Portfolio of Ronit Naik, a software engineer specializing in web development.",
+  keywords: "Ronit Naik, software engineer, web developer, portfolio, projects, skills",
 }
 
 export default function RootLayout({ children }) {

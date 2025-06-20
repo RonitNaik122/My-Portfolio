@@ -25,7 +25,7 @@ export default function Home() {
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9])
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
       <div className="relative min-h-screen" ref={containerRef}>
         {/* Add the animated background component */}
         <AnimatedBackground />
